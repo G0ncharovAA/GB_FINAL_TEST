@@ -240,4 +240,41 @@ Query OK, 0 rows affected (0,12 sec)
 
 ![screen of creating child tables.](./screens/13.png "screen of creating child tables.")
 
+9. Заполнить низкоуровневые таблицы именами(животных), командами
+которые они выполняют и датами рождения
+
+```
+mysql> INSERT INTO домашние_животные(name, date_of_birth) VALUES ('Лайка', '2015-03-12');
+Query OK, 1 row affected (0,01 sec)
+mysql> INSERT INTO Собаки(parent_id, mass) VALUES (LAST_INSERT_ID(), 9.4);
+Query OK, 1 row affected (0,00 sec)
+
+mysql> INSERT INTO домашние_животные(name, date_of_birth) VALUES ('Муся', '2023-001-10');
+Query OK, 1 row affected (0,01 sec)
+mysql> INSERT INTO Кошки(parent_id, breed) VALUES (LAST_INSERT_ID(), 'Сфинкс');
+Query OK, 1 row affected (0,00 sec)
+
+mysql> INSERT INTO домашние_животные(name, date_of_birth) VALUES ('Персик', '2022-03-08');
+Query OK, 1 row affected (0,01 sec)
+mysql> INSERT INTO хомяки(parent_id, furr_color) VALUES (LAST_INSERT_ID(), 'Розовый');
+Query OK, 1 row affected (0,01 sec)
+
+mysql> INSERT INTO вьючные_животные(name, date_of_birth) VALUES ('Ветер', '2018-10-02');
+Query OK, 1 row affected (0,01 sec)
+mysql> INSERT INTO лошади(parent_id, lear) VALUES (LAST_INSERT_ID(), 'Пегий');
+Query OK, 1 row affected (0,01 sec)
+
+mysql> INSERT INTO вьючные_животные(name, date_of_birth) VALUES ('Ветер', '2019-05-10');
+Query OK, 1 row affected (0,02 sec)
+mysql> INSERT INTO верблюды(parent_id, bend_quantity) VALUES (LAST_INSERT_ID(), 2);
+Query OK, 1 row affected (0,01 sec)
+
+mysql> INSERT INTO вьючные_животные(name, date_of_birth) VALUES ('Степан', '2022-11-25');
+Query OK, 1 row affected (0,01 sec)
+mysql> INSERT INTO Ослы(parent_id, capacity) VALUES (LAST_INSERT_ID(), 24.2);
+Query OK, 1 row affected (0,00 sec)
+```
+
+![screen of filling up tables.](./screens/14.png "screen of filling up tables.")
+
 
