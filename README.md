@@ -277,4 +277,95 @@ Query OK, 1 row affected (0,00 sec)
 
 ![screen of filling up tables.](./screens/14.png "screen of filling up tables.")
 
+10. Удалив из таблицы верблюдов, т.к. верблюдов решили перевезти в другой
+питомник на зимовку. Объединить таблицы лошади, и ослы в одну таблицу.
+
+```
+mysql> CREATE TEMPORARY TABLE temp_верблюды (parent_id INT);
+Query OK, 0 rows affected (0,01 sec)
+
+mysql> INSERT INTO temp_верблюды (parent_id) SELECT parent_id FROM верблюды;
+Query OK, 1 row affected (0,00 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> DROP TABLE верблюды;
+Query OK, 0 rows affected (0,03 sec)
+
+mysql> DELETE FROM вьючные_животные WHERE id IN (SELECT parent_id FROM temp_верблюды);
+Query OK, 1 row affected (0,01 sec)
+
+mysql> DROP TABLE temp_верблюды;
+Query OK, 0 rows affected (0,00 sec)
+```
+
+![screen of removing camels.](./screens/15.png "screen of removing camels.")
+
+```
+mysql> CREATE TABLE лошади_и_ослы(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   lear VARCHAR(255),
+    ->   capacity REAL,
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES вьючные_животные(id)
+    -> );
+Query OK, 0 rows affected (0,04 sec)
+
+mysql> INSERT INTO лошади_и_ослы (parent_id, lear) SELECT parent_id, lear FROM лошади;
+Query OK, 1 row affected (0,01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO лошади_и_ослы (parent_id, capacity) SELECT parent_id, capacity FROM Ослы;
+Query OK, 1 row affected (0,03 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> drop table лошади;
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> drop table Ослы;
+Query OK, 0 rows affected (0,02 sec)
+
+mysql> SELECT * FROM лошади_и_ослы;
++----+-----------+------------+----------+
+| id | parent_id | lear       | capacity |
++----+-----------+------------+----------+
+|  1 |         1 | Пегий      |     NULL |
+|  2 |         3 | NULL       |     24.2 |
++----+-----------+------------+----------+
+2 rows in set (0,00 sec)
+```
+
+![screen of united table.](./screens/16.png "screen of united table.")
+
+11.Создать новую таблицу “молодые животные” в которую попадут все
+животные старше 1 года, но младше 3 лет и в отдельном столбце с точностью
+до месяца подсчитать возраст животных в новой таблице
+
+```
+mysql> CREATE TABLE молодые_животные(
+    ->  id INT AUTO_INCREMENT PRIMARY KEY,
+    ->  name VARCHAR(255),
+    ->  age_years INT,
+    ->  age_months INT
+    -> );
+Query OK, 0 rows affected (0,03 sec)
+
+mysql> INSERT INTO молодые_животные(name, age_years, age_months) SELECT name, FLOOR(DATEDIFF(NOW(), date_of_birth) / 365), MOD(DATEDIFF(NOW(), date_of_birth), 12) FROM домашние_животные;
+Query OK, 3 rows affected (0,03 sec)
+
+mysql> INSERT INTO молодые_животные(name, age_years, age_months) SELECT name, FLOOR(DATEDIFF(NOW(), date_of_birth) / 365), MOD(DATEDIFF(NOW(), date_of_birth), 12) FROM домашние_животные;
+Query OK, 3 rows affected (0,03 sec)
+
+mysql> DELETE FROM молодые_животные WHERE age_years < 1 OR age_years > 3;
+Query OK, 4 rows affected (0,01 sec)
+
+mysql> SELECT * FROM молодые_животные;
+```
+
+![screen of the 'young animals' table.](./screens/17.png "screen of 'young animals' table.")
+
+12. Объединить все таблицы в одну, при этом сохраняя поля, указывающие на
+прошлую принадлежность к старым таблицам.
+
+
 
