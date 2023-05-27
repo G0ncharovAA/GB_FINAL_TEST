@@ -141,4 +141,103 @@ alice@ubserv:~$ history
 
 ![diagram of animal classes.](./diagrams/animals.drawio.png "diagram of animal classes.")
 
+7. В подключенном MySQL репозитории создать базу данных “Друзья
+человека”
+
+```
+mysql> CREATE DATABASE друзья_человека;
+mysql> show databases;
++-------------------------------+
+| Database                      |
++-------------------------------+
+| information_schema            |
+| mysql                         |
+| performance_schema            |
+| sys                           |
+| друзья_человека               |
++-------------------------------+
+```
+
+![screen of creating database.](./screens/11.png "screen of creating database.")
+
+8. Создать таблицы с иерархией из диаграммы в БД
+
+```
+mysql> CREATE TABLE домашние_животные (   id INT AUTO_INCREMENT PRIMARY KEY,   name VARCHAR(255),   date_of_birth DATE );
+Query OK, 0 rows affected (0,03 sec)
+
+mysql> CREATE TABLE вьючные_животные (   id INT AUTO_INCREMENT PRIMARY KEY,   name VARCHAR(255),   date_of_birth DATE );
+Query OK, 0 rows affected (0,12 sec)
+
+mysql> show tables;
++-----------------------------------------+
+| Tables_in_друзья_человека               |
++-----------------------------------------+
+| вьючные_животные                        |
+| домашние_животные                       |
++-----------------------------------------+
+2 rows in set (0,01 sec)
+```
+
+![screen of creating tables.](./screens/12.png "screen of creating tables.")
+
+```
+mysql> CREATE TABLE Собаки(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   mass REAL,
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES домашние_животные(id)
+    -> );
+
+Query OK, 0 rows affected (0,15 sec)
+
+mysql> CREATE TABLE Кошки(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   breed VARCHAR(255),
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES домашние_животные(id)
+    -> );
+Query OK, 0 rows affected (0,04 sec)
+
+mysql> CREATE TABLE хомяки(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   furr_color VARCHAR(255),
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES домашние_животные(id)
+    -> );
+Query OK, 0 rows affected (0,04 sec)
+
+mysql> CREATE TABLE лошади(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   lear VARCHAR(255),
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES вьючные_животные(id)
+    -> );
+Query OK, 0 rows affected (0,03 sec)
+
+mysql> CREATE TABLE верблюды(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   bend_quantity INT,
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES вьючные_животные(id)
+    -> );
+Query OK, 0 rows affected (0,41 sec)
+
+mysql> CREATE TABLE Ослы(
+    ->   id INT NOT NULL AUTO_INCREMENT,
+    ->   parent_id INT NOT NULL,
+    ->   capacity REAL,
+    ->   PRIMARY KEY (id),
+    ->   FOREIGN KEY (parent_id) REFERENCES вьючные_животные(id)
+    -> );
+Query OK, 0 rows affected (0,12 sec)
+```
+
+![screen of creating child tables.](./screens/13.png "screen of creating child tables.")
+
 
