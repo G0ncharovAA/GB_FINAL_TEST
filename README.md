@@ -367,5 +367,38 @@ mysql> SELECT * FROM молодые_животные;
 12. Объединить все таблицы в одну, при этом сохраняя поля, указывающие на
 прошлую принадлежность к старым таблицам.
 
+```
+mysql> CREATE TABLE единая_таблица(
+    ->  id INT AUTO_INCREMENT PRIMARY KEY,
+    ->  name VARCHAR(255),
+    ->  date_of_birth DATE,
+    ->  mass REAL,
+    ->  breed VARCHAR(255),
+    ->  furr_color VARCHAR(255),
+    ->  lear VARCHAR(255),
+    ->  capacity REAL
+    -> );
+Query OK, 0 rows affected (0,14 sec)
+
+mysql> INSERT INTO единая_таблица(name, date_of_birth, mass) SELECT домашние_животные.name, домашние_животные.date_of_birth, Собаки.mass FROM Собаки JOIN домашние_животные ON Собаки.parent_id = домашние_животные.id;
+Query OK, 1 row affected (0,01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO единая_таблица(name, date_of_birth, breed) SELECT домашние_животные.name, домашние_животные.date_of_birth, Кошки.breed FROM Кошки JOIN домашние_животные ON Кошки.parent_id = домашние_животные.id;
+Query OK, 1 row affected (0,01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO единая_таблица(name, date_of_birth, furr_color) SELECT домашние_животные.name, домашние_животные.date_of_birth, хомяки.furr_color FROM хомяки JOIN домашние_животные ON хомяки.parent_id = домашние_животные.id;
+Query OK, 1 row affected (0,01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO единая_таблица(name, date_of_birth, lear, capacity) SELECT вьючные_животные.name, вьючные_животные.date_of_birth, лошади_и_ослы.lear, лошади_и_ослы.capacity FROM лошади_и_ослы JOIN вьючные_животные ON лошади_и_ослы.parent_id = вьючные_животные.id;
+Query OK, 2 rows affected (0,03 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+```
+
+![screen of the combined table.](./screens/18.png "screen of combined table.")
+
+13.Создать класс с Инкапсуляцией методов и наследованием по диаграмме.
 
 
